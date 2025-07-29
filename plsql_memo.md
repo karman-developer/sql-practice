@@ -46,7 +46,19 @@ EXCEPTION
       DBMS_OUTPUT.PUT_LINE('その他のエラーが発生');
 END;
 ```
+--------
+```
+DECLARE
+   i NUMBER := 1;
+BEGIN
+   LOOP
+      EXIT WHEN i > 5;
+      DBMS_OUTPUT.PUT_LINE('Count: ' || i);
+      i := i + 1;
+   END LOOP;
+END;
+```
 例えるなら：
-CURSORは本のしおりのようなもの
-FETCHは「しおりの位置にある1ページを読む」動作
-INFO 変数(v_name)は「読んだページの内容をメモするノート」
+1. CURSORは本のしおりのようなもの
+2. FETCHは「しおりの位置にある1ページを読む」動作
+3. INFO 変数(v_name)は「読んだページの内容をメモするノート」
