@@ -101,6 +101,60 @@ BEGIN
 END;
 /
 ```
+```
+DECLARE
+  CURSOR c_test(p_status VARCHAR2) IS
+  select 
+    P.product_id,
+    P.product_name,
+    WO.work_order_id,
+    WO.quantity, 
+    WO.status
+  from 
+    products P
+  inner join
+    work_orders WO
+  on
+    P.product_id = WO.product_id
+  where
+    WO.status = p_status
+  group by
+    P.product_id,
+    P.product_name,
+    WO.work_order_id,
+    WO.quantity,
+    WO.status
+  order by
+    P.product_id;
+BEGIN
+  FOR rec IN c_test('完了') LOOP
+    DBMS_OUTPUT.PUT_LINE('■製品ID: ' || rec.product_id || ', 名称:' || rec.product_name);
+    DBMS_OUTPUT.PUT_LINE('作業ID: ' || rec.work_order_id || ' 数量:' || rec.quantity);
+  END LOOP;
+END;
+/
+```
+```
+DECLARE
+  CURSOR c_products IS
+    SELECT product_id, product_name FROM products;
+
+  CURSOR c_orders(p_product_id VARCHAR2) IS
+    SELECT work_order_id, quantity
+    FROM work_orders
+    WHERE product_id = p_product_id AND status = '完了';
+
+BEGIN
+  FOR prod_rec IN c_products LOOP
+    DBMS_OUTPUT.PUT_LINE('■製品ID: ' || prod_rec.product_id || ', 名称: ' || prod_rec.product_name);
+
+    FOR order_rec IN c_orders(prod_rec.product_id) LOOP
+      DBMS_OUTPUT.PUT_LINE(' 作業ID: ' || order_rec.work_order_id || ', 数量: ' || order_rec.quantity);
+    END LOOP;
+
+  END LOOP;
+END;
+```
 --------
 ```
 BEGIN
