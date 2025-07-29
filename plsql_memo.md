@@ -34,6 +34,73 @@ BEGIN
    CLOSE カーソル名;
 END;
 ```
+```
+DECLARE
+  CURSOR v_test IS
+    SELECT
+      P.product_id,
+      P.product_name,
+      SUM(WO.quantity * P.unit_price) AS total_sales
+    FROM
+      products P
+    INNER JOIN
+      work_orders WO
+    ON
+      P.product_id = WO.product_id
+    GROUP BY
+      P.product_id, P.product_name
+    ORDER BY
+      total_sales DESC;
+
+  v_product_id   products.product_id%TYPE;
+  v_product_name products.product_name%TYPE;
+  v_total_sales  NUMBER;
+BEGIN
+  OPEN v_test;
+
+  LOOP
+    FETCH v_test INTO v_product_id, v_product_name, v_total_sales;
+    EXIT WHEN v_test%NOTFOUND;
+
+    DBMS_OUTPUT.PUT_LINE(
+      '製品ID: ' || v_product_id ||
+      ', 名称: ' || v_product_name ||
+      ', 売上: ' || TO_CHAR(v_total_sales)
+    );
+  END LOOP;
+
+  CLOSE v_test;
+END;
+/
+```
+```
+DECLARE
+  CURSOR v_test IS
+    SELECT
+      P.product_id,
+      P.product_name,
+      SUM(WO.quantity * P.unit_price) AS total_sales
+    FROM
+      products P
+    INNER JOIN
+      work_orders WO
+    ON
+      P.product_id = WO.product_id
+    GROUP BY
+      P.product_id, P.product_name
+    ORDER BY
+      total_sales DESC;
+BEGIN
+  FOR rec IN v_test LOOP
+    DBMS_OUTPUT.PUT_LINE(
+      '製品ID: ' || rec.product_id ||
+      ', 名称: ' || rec.product_name ||
+      ', 売上: ' || TO_CHAR(rec.total_sales)
+    );
+  END LOOP;
+END;
+/
+```
 --------
 ```
 BEGIN
