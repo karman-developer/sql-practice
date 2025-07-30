@@ -63,6 +63,24 @@ BEGIN
   END LOOP;
 END;
 ```
+```
+DECLARE
+  TYPE name_list IS TABLE OF VARCHAR2(100) INDEX BY PLS_INTEGER;
+  v_names name_list;
+  i PLS_INTEGER := 1;
+BEGIN
+  
+  FOR rec IN (SELECT component_name FROM components) LOOP
+    v_names(i) := rec.component_name;
+    i := i + 1;
+  END LOOP;
+
+  FOR j IN 1 .. v_names.COUNT LOOP
+    DBMS_OUTPUT.PUT_LINE(v_names(j));
+  END LOOP;
+END;
+/
+```
 
 #### EXCEPTION によるエラーハンドリング
 ```
