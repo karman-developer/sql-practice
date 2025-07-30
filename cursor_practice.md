@@ -36,3 +36,45 @@ BEGIN
 END;
 /
 ```
+
+#### %ROWTYPE の使い方 
+```
+DECLARE
+  v_product products%ROWTYPE;
+BEGIN
+  SELECT * INTO v_product FROM products WHERE product_id = 'P001';
+  DBMS_OUTPUT.PUT_LINE('製品名：' || v_product.product_name);
+END;
+
+```
+
+#### コレクション型（TABLE OF）による複数データの保持とループ 
+```
+DECLARE
+  TYPE name_list IS TABLE OF VARCHAR2(100) INDEX BY PLS_INTEGER;
+  v_names name_list;
+BEGIN
+  v_names(1) := '佐藤';
+  v_names(2) := '鈴木';
+  v_names(3) := '高橋';
+
+  FOR i IN 1..3 LOOP
+    DBMS_OUTPUT.PUT_LINE(v_names(i));
+  END LOOP;
+END;
+```
+
+#### EXCEPTION によるエラーハンドリング
+```
+DECLARE
+  v_price NUMBER;
+BEGIN
+  SELECT cost INTO v_price FROM components WHERE component_id = 'C999'; -- 存在しない
+  DBMS_OUTPUT.PUT_LINE('価格: ' || v_price);
+EXCEPTION
+  WHEN NO_DATA_FOUND THEN
+    DBMS_OUTPUT.PUT_LINE('部品が見つかりませんでした');
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('その他のエラーが発生しました');
+END;
+```
