@@ -96,3 +96,25 @@ EXCEPTION
     DBMS_OUTPUT.PUT_LINE('その他のエラーが発生しました');
 END;
 ```
+```
+-- 部品の新しい単価を受け取り、その製品に含まれる部品単価を更新するストアドプロシージャを作成
+CREATE OR REPLACE PROCEDURE update_component_cost (
+    p_component_id IN VARCHAR2,
+    p_new_cost     IN NUMBER
+) IS
+BEGIN
+    UPDATE components
+    SET unit_cost = p_new_cost
+    WHERE component_id = p_component_id;
+
+    DBMS_OUTPUT.PUT_LINE(p_component_id || ' : ' || p_new_cost || '更新しました。');
+END;
+/
+
+-- 実行＆作成済確認コマンド
+EXEC update_component_cost('C001', 1500);
+
+SELECT object_name, status 
+FROM user_objects 
+WHERE object_type = 'PROCEDURE';
+```
