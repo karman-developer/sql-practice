@@ -96,8 +96,8 @@ EXCEPTION
     DBMS_OUTPUT.PUT_LINE('その他のエラーが発生しました');
 END;
 ```
+#### 部品の新しい単価を受け取り、その製品に含まれる部品単価を更新するストアドプロシージャを作成
 ```
--- 部品の新しい単価を受け取り、その製品に含まれる部品単価を更新するストアドプロシージャを作成
 CREATE OR REPLACE PROCEDURE update_component_cost (
     p_component_id IN VARCHAR2,
     p_new_cost     IN NUMBER
